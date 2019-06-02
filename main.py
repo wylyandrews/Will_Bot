@@ -21,6 +21,7 @@ if __name__ == "__main__":
             return
         if ping in message.content:
             await PrequelHandler.handle_messages(message)
+            await DNDHandler.handle_messages(message)
 
 
     client.run(TOKEN)
