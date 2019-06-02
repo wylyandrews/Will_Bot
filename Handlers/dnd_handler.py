@@ -13,5 +13,16 @@ class DNDHandler(BaseHandler):
     @classmethod
     async def roll(cls, message):
         if "roll" in message.content:
-            answer = random.randint(1, 21)
-            await message.channel.send("Your roll is: " + str(answer))
+            position = message.content.index("roll")
+            position += len("roll")
+            new_message = message.content[position:]
+            split_message = new_message.split()
+            for part in split_message:
+                if len(part) >= 2 and part[0] == "d" and part[1:].isdigit() and int(part[1:]) != 0:
+                    die = int(part[1:])
+                    break
+            else:
+                die = 20
+
+            answer = random.randint(1, die)
+            await message.channel.send("Your d" + str(die) + " roll is: " + str(answer))
