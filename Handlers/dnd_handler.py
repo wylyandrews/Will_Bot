@@ -25,10 +25,27 @@ class DNDHandler(BaseHandler):
                 for letter in part:
                     if letter == "d":
                         index = part.index("d")
+
+                        # find out if there's any misc. characters after the number part of the roll
+                        end = len(part)
+
+                        while index+1 < end and not part[index+1:end].isdigit():
+                            end -= 1
+
+                        # empty substring. move on to next letter
+                        if not part[index+1:end].isdigit():
+                            continue
+
                         # determine if letter is part of die command or regular word
-                        if len(part) > index+1 and part[index+1:].isdigit() and int(part[index+1:]) != 0:
+                        if len(part) > index+1 and part[index+1:end].isdigit() and int(part[index+1:end]) != 0:
                             has_one_rolled = True
-                            die = int(part[index+1:])
+                            die = int(part[index+1:end])
+
+                            start = 0
+
+                            while start < index and not part[start:index].isdigit():
+                                start += 1
+
                             if part[:index].isdigit():
                                 total = int(part[:index])
                             else:
@@ -63,7 +80,13 @@ class DNDHandler(BaseHandler):
                                 my_message += " +"
                         my_message += " = " + str(sum(int_rolls))
 
+                        if "disadvantage" in message.content.lower():
+                            my_message += " ( disadvantage would make that " + str(min(int_rolls)) + " )"
+                        elif "advantage" in message.content.lower():
+                            my_message += " ( advantage would make that " + str(max(int_rolls)) + " )"
+
                         if len(my_message) >= 2000:
                             my_message = my_message[:40] + " ... " + my_message[-40:]
                         await message.channel.send(my_message)
+
 
