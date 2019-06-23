@@ -22,8 +22,7 @@ if __name__ == "__main__":
         if ping in message.content:
             await ACMHandler.handle_messages(message)
             await DNDHandler.handle_messages(message)
+            await NoteHandler.handle_messages(message)
             await PrequelHandler.handle_messages(message)
 
-
     client.run(TOKEN)
-
