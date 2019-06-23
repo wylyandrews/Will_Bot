@@ -20,8 +20,9 @@ if __name__ == "__main__":
         if message.author == client.user:
             return
         if ping in message.content:
-            await PrequelHandler.handle_messages(message)
+            await ACMHandler.handle_messages(message)
             await DNDHandler.handle_messages(message)
+            await PrequelHandler.handle_messages(message)
 
 
     client.run(TOKEN)
